@@ -12,7 +12,7 @@ HEIGHT = 800
 #Player variables
 PLAYER_NAME = "Hannah" 
 FRIEND1_NAME = "Maria" 
-FRIEND2_NAME = "Seda" 
+FRIEND2_NAME = "Marlyn" 
 current_room = 31 # start at room = 31
 
 # this specifies where to start drawing the room
@@ -30,7 +30,7 @@ TILE_SIZE = 30
 
 # instructions that places the character on the screen and makes the arrow keys control him
 player_y, player_x = 2, 5
-game_over = false
+game_over = False
 
 PLAYER = {
     # this dict stores the animation keys/frames

@@ -12,7 +12,7 @@ HEIGHT = 800
 #Player variables
 PLAYER_NAME = "Hannah" 
 FRIEND1_NAME = "Maria" 
-FRIEND2_NAME = "Seda" 
+FRIEND2_NAME = "Marlyn" 
 current_room = 31 # start at room = 31
 
 # this specifies where to start drawing the room

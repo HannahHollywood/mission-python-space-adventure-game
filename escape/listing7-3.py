@@ -1,50 +1,52 @@
-# This file contains the Game Map data
+# Escape - A Python Adventure 
+# by Sean McManus / www.sean.co.uk
+# Typed in by Hannah-Beth Hannah-Becker
 
 import time, random, math
 
-###########
-#VARIABLES#
-###########
+###############
+## VARIABLES ##
+###############
 
 WIDTH = 800 #window size
 HEIGHT = 800
 
-#Player variables
-PLAYER_NAME = "Hannah" 
-FRIEND1_NAME = "Maria" 
-FRIEND2_NAME = "Seda" 
-current_room = 31 # start at room = 31
+#PLAYER variables
+PLAYER_NAME = "Hannah-Beth"
+FRIEND1_NAME = "Ben"
+FRIEND2_NAME = "Marlyn"
+current_room = 31 # start room = 31
 
-# this specifies where to start drawing the room
 top_left_x = 100
 top_left_y = 150
 
-# image files to be displayed in the rooms
 DEMO_OBJECTS = [images.floor, images.pillar, images.soil]
 
 LANDER_SECTOR = random.randint(1, 24)
 LANDER_X = random.randint(2, 11)
-LANDER_Y = random.randint(2,11)
+LANDER_Y = random.randint(2, 11)
 
 TILE_SIZE = 30
 
-# instructions that places the character on the screen and makes the arrow keys control him
 player_y, player_x = 2, 5
-game_over = false
+game_over = False
 
 PLAYER = {
-    # this dict stores the animation keys/frames
     "left": [images.spacesuit_left, images.spacesuit_left_1,
-             images.spacesuit_left_2, images.spacesuit_left_3, images.spacesuit_left_4
-             ],
+             images.spacesuit_left_2, images.spacesuit_left_3,
+             images.spacesuit_left_4
+             ], 
     "right": [images.spacesuit_right, images.spacesuit_right_1,
-             images.spacesuit_right_2, images.spacesuit_right_3, images.spacesuit_right_4
-             ],
+              images.spacesuit_right_2, images.spacesuit_right_3,
+              images.spacesuit_right_4
+              ],
     "up": [images.spacesuit_back, images.spacesuit_back_1,
-             images.spacesuit_back_2, images.spacesuit_back_3, images.spacesuit_back_4
-             ],
+           images.spacesuit_back_2, images.spacesuit_back_3,
+           images.spacesuit_back_4 
+           ],
     "down": [images.spacesuit_front, images.spacesuit_front_1,
-             images.spacesuit_fron_2, images.spacesuit_front_3, images.spacesuit_front_4
+             images.spacesuit_front_2, images.spacesuit_front_3,
+             images.spacesuit_front_4
              ]
     }
 
@@ -53,23 +55,21 @@ player_frame = 0
 player_image = PLAYER[player_direction][player_frame]
 player_offset_x, player_offset_y = 0, 0
 
-###########
-##  MAP  ##
-###########
+
+###############
+##    MAP    ##
+###############  
 
 MAP_WIDTH = 5
-# added a secret room to the game by changing MAP_HEIGHT to 11 (from 10)
-MAP_HEIGHT = 11 
+MAP_HEIGHT = 10 
 MAP_SIZE = MAP_WIDTH * MAP_HEIGHT
 
 GAME_MAP = [ ["Room 0 - where unused objects are kept", 0, 0, False, False] ]
 
 outdoor_rooms = range(1, 26)
-# below generates rooms 1 - 25 which are all the dusty planet surface (so repeated)
-for planetsectors in range(1, 26):
+for planetsectors in range(1, 26): #rooms 1 to 25 are generated here
     GAME_MAP.append( ["The dusty planet surface", 13, 13, True, True] )
 
-# adding rooms 26 - 50 to the Game Map by adding them to the list
 GAME_MAP  += [
         #["Room name", height, width, Top exit?, Right exit?]
         ["The airlock", 13, 5, True, False], # room 26
@@ -92,23 +92,16 @@ GAME_MAP  += [
         ["Utilities control room", 9, 9, False, True], # room 43
         ["Systems engineering bay", 9, 11, False, False], # room 44
         ["Security portal to Mission Control", 7, 7, True, False], # room 45
-        # Adding friend names to the name of the room via a string
         [FRIEND1_NAME + "'s sleeping quarters", 9, 11, True, True], # room 46
         [FRIEND2_NAME + "'s sleeping quarters", 9, 11, True, True], # room 47
         ["The pipeworks", 13, 11, True, False], # room 48
         ["The chief scientist's office", 9, 7, True, True], # room 49
-        ["The robot workshop", 9, 11, True, False], # room 50 (+ secret rooms)
-        # added a secret passageway
-        ["Secret Passageway", 9, 15, True, True], # room 51
-        ["Secret Passageway", 9, 9, True, True], # room 52
-        ["Secret Passageway", 9, 15, True, True], # room 53
-        ["Secret Passageway", 9, 9, True, True], # room 54
-        ["Secret Passageway", 9, 15, True, True] # room 55
+        ["The robot workshop", 9, 11, True, False] # room 50
         ]
 
 #simple sanity check on map above to check data entry
-# we do this because we didn't include room 0 when we calculated the map size
 assert len(GAME_MAP)-1 == MAP_SIZE, "Map size and GAME_MAP don't match"
+
 
 ###############
 ##  OBJECTS  ##
@@ -265,6 +258,7 @@ items_player_may_carry = list(range(53, 82))
 # Numbers below are for floor, pressure pad, soil, toxic floor.
 items_player_may_stand_on = items_player_may_carry + [0, 39, 2, 48]
 
+
 ###############
 ##  SCENERY  ##
 ###############
@@ -323,15 +317,14 @@ print(check_counter, "scenery items")
 assert check_counter == 161, "Expected 161 scenery items"
 assert checksum == 200095, "Error in scenery data"
 print("Scenery checksum: " + str(checksum))
-# the checksum function checks that all of the items are in the code and accounted for
 
-for room in range(1, 26): # Add random scenety in planet locations
-    if room != 13: # Skip room 13
+for room in range(1, 26):# Add random scenery in planet locations.
+    if room != 13: # Skip room 13.
         scenery_item = random.choice([16, 28, 29, 30])
         scenery[room] = [[scenery_item, random.randint(2, 10),
                           random.randint(2, 10)]]
-
-# Use loops to add fences to the planet surface rooms
+        
+# Use loops to add fences to the planet surface rooms.
 for room_coordinate in range(0, 13):
     for room_number in [1, 2, 3, 4, 5]: # Add top fence
         scenery[room_number] += [[31, 0, room_coordinate]]
@@ -342,13 +335,13 @@ for room_coordinate in range(0, 13):
 
 del scenery[21][-1] # Delete last fence panel in Room 21
 del scenery[25][-1] # Delete last fence panel in Room 25
+           
 
 ###############
 ## MAKE MAP  ##
 ###############
 
 def get_floor_type():
-    # floor types: tiles = 0 // soil = 2
     if current_room in outdoor_rooms:
         return 2 # soil
     else:
@@ -364,8 +357,6 @@ def generate_map():
     room_height = room_data[1]
     room_width = room_data[2]
 
-    # this is giving each room a type of floor and edging
-    # get_floor_type will find the right floor type for the room
     floor_type = get_floor_type()
     if current_room in range(1, 21):
         bottom_edge = 2 #soil
@@ -395,12 +386,7 @@ def generate_map():
         room_map[middle_row+1][room_width - 1] = floor_type
         room_map[middle_row-1][room_width - 1] = floor_type
 
-    # if we divide the current room number by the map width (5), using modular% we'll
-        # get a 1 if the room is on the left edge (as in, a whole remiander)
-        # basically continue checking for a left exit if the reminder is not equal to 1
     if current_room % MAP_WIDTH != 1: # If room is not on left of map
-        # we work out which room is on the other side of that wall by
-            # subtracting 1 from the current room number
         room_to_left = GAME_MAP[current_room - 1]
         # If room on the left has a right exit, add left exit in this room
         if room_to_left[4]: 
@@ -421,11 +407,6 @@ def generate_map():
             room_map[room_height-1][middle_column + 1] = floor_type
             room_map[room_height-1][middle_column - 1] = floor_type
 
-# Testing that the right floor / wall type is being rendered as per above for loops
-##current_room = 5
-##generate_map()
-##print(room_map)
-
     if current_room in scenery:
         for this_scenery in scenery[current_room]: 
             scenery_number = this_scenery[0]
@@ -439,6 +420,7 @@ def generate_map():
 
             for tile_number in range(1, image_width_in_tiles):
                 room_map[scenery_y][scenery_x + tile_number] = 255
+
 
 ###############
 ## EXPLORER  ##
@@ -454,26 +436,21 @@ def draw():
 ##    room_map[1][2] = 9
 ##    room_map[1][8] = 12
 ##    room_map[1][9] = 9
-    # the first index shows (y-cor) how far back from the room the object is
-    #   (the smaller the number, the nearer to the back they are)
-    # the second index shows (x-cor) how far across the room they are from left > right
-    # the number beside the = sign is the key for the object
 
     for y in range(room_height):
         for x in range(room_width):
-            # utilising the objects dict to display object-images in the rooms
-            if room_map[y][x] != 255:
+            if room_map[y][x] != 255: 
                 image_to_draw = objects[room_map[y][x]][0]
                 screen.blit(image_to_draw,
                     (top_left_x + (x*30),
                      top_left_y + (y*30) - image_to_draw.get_height()))
-                
-            if player_y == y:
-                image_to_draw = PLAYER[player_direction][player_frame]
-                screen.blit(image_to_draw,
-                            (top_left_x + (player_x*30)+(player_offset_x*30),
-                             top_left_y + (player_y*30)+(player_offset_y*30)
-                             - image_to_draw.get_height()))
+        if player_y == y:
+            image_to_draw = PLAYER[player_direction][player_frame]
+            screen.blit(image_to_draw,
+                        (top_left_x + (player_x*30)+(player_offset_x*30),
+                         top_left_y + (player_y*30)+(player_offset_y*30)
+                         - image_to_draw.get_height()))
+
 
 ##def movement():
 ##    global current_room
@@ -488,9 +465,8 @@ def draw():
 ##    if keyboard.down:
 ##        current_room += MAP_WIDTH
 ##
-##    # due to adding secret passageways I extended the room amounts for the if statement
-##    if current_room > 55:
-##        current_room = 55
+##    if current_room > 50:
+##        current_room = 50
 ##    if current_room < 1:
 ##        current_room = 1
 ##
@@ -498,3 +474,4 @@ def draw():
 ##        print("Entering room:" + str(current_room))
 ##
 ##clock.schedule_interval(movement, 0.08)
+

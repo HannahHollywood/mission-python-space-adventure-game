@@ -13,9 +13,9 @@ WIDTH = 800 #window size
 HEIGHT = 800
 
 #PLAYER variables
-PLAYER_NAME = "Hannah-Beth" # change this to your name!
-FRIEND1_NAME = "Ben" # change this to a friend's name!
-FRIEND2_NAME = "Marianna" # change this to another friend's name!
+PLAYER_NAME = "Hannah-Beth"
+FRIEND1_NAME = "Ben"
+FRIEND2_NAME = "Marlyn"
 current_room = 31 # start room = 31
 
 top_left_x = 100
